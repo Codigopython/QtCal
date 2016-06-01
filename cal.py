@@ -31,6 +31,8 @@ class Calculadora:
                     subtotal /= elementos[y + 1]
                 else:
                     return "division por 0"
+            elif i == "R2" and y == 0:
+                subtotal = int(elementos[y])**(1/2)
             y += 1
         return subtotal
 

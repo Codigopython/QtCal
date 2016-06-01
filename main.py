@@ -33,7 +33,7 @@ class QtCalWin(QMainWindow, form_QtCalWindow):
         self.lista_numeros = []
         self.lista_op = []
         self.primer_caracter = True
-        #self.totalizo = False
+        self.totalizo = False
 
         #se carga la hoja de estilo de la aplicacion
         self.setObjectName("WindowMain")
@@ -79,20 +79,28 @@ class QtCalWin(QMainWindow, form_QtCalWindow):
                                                       self.lista_op))
                 self.lista_op.append(operacion)
                 self.primer_caracter = True
-        elif operacion == "R2":
-            #if self.totalizo:
-            #    self.lista_numeros.append(float(self.display_ql.text()))
 
-            QMessageBox.information(self, 'Informacion:', 'no implementado '
-                                                          'lo sentimos.')
-        elif operacion == "=":
+        elif operacion == "R2":
+            x = 0
             self.lista_numeros.append(float(self.display_ql.text()))
-            x = calc.total(self.lista_numeros, self.lista_op)
-            self.display_ql.setText(str(x))
-            self.registro_ql.setText(calc.memoria(self.lista_numeros,
-                                                  self.lista_op))
-            self.clear(False)
-            #self.totalizo = True
+            if not self.totalizo and len(self.lista_op):
+                x = calc.total(self.lista_numeros, self.lista_op)
+                self.clear(False)
+                self.lista_numeros.append(x)
+            self.lista_op.append(operacion)
+            self.registro_ql.setText("R2(" + str(self.lista_numeros[0]) + ")")
+            self.display_ql.setText(str(round(calc.total(self.lista_numeros,
+                                                         self.lista_op), 2)))
+        elif operacion == "=":
+            if len(self.lista_numeros) and self.display_ql.text() != "0":
+                self.lista_numeros.append(float(self.display_ql.text()))
+                x = calc.total(self.lista_numeros, self.lista_op)
+                self.display_ql.setText(str(x))
+                self.registro_ql.setText(calc.memoria(self.lista_numeros,
+                                                      self.lista_op))
+                self.clear(False)
+                self.totalizo = True
+
         elif operacion == "CE":
             self.clear(True)
 
