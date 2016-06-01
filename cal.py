@@ -22,14 +22,14 @@ class Calculadora:
             elif i == "*" and y != 0:
                 subtotal *= elementos[y + 1]
             elif i == "/" and y == 0:
-                if elementos[y + 1] != 0:
+                try:
                     subtotal = elementos[y] / elementos[y + 1]
-                else:
+                except ZeroDivisionError:
                     return "division por 0"
             elif i == "/" and y != 0:
-                if elementos[y + 1] != 0:
+                try:
                     subtotal /= elementos[y + 1]
-                else:
+                except ZeroDivisionError:
                     return "division por 0"
             elif i == "R2" and y == 0:
                 subtotal = int(elementos[y])**(1/2)
