@@ -41,7 +41,10 @@ class QtCalWin(QMainWindow, form_QtCalWindow):
             self.setStyleSheet(f.read())
 
     def addn(self):
-        n = self.sender().objectName()[-1:]
+        if self.sender().objectName()[-1:] == "p":
+            n = "."
+        else:
+            n = self.sender().objectName()[-1:]
         if self.display_ql.text() == "0" or self.display_ql.text() == "" or \
                 self.primer_caracter:
             self.display_ql.setText(str(n))
