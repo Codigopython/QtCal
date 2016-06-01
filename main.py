@@ -6,50 +6,12 @@ import sys
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4 import uic
-
-
-def total(elementos, operadores):
-    y = 0
-    for i in operadores:
-        if i == "+" and y == 0:
-            subtotal = elementos[y] + elementos[y + 1]
-        elif i == "+" and y != 0:
-            subtotal += elementos[y + 1]
-        elif i == "-" and y == 0:
-            subtotal = elementos[y] - elementos[y + 1]
-        elif i == "-" and y != 0:
-            subtotal -= elementos[y + 1]
-        elif i == "*" and y == 0:
-            subtotal = elementos[y] * elementos[y + 1]
-        elif i == "*" and y != 0:
-            subtotal *= elementos[y + 1]
-        elif i == "/" and y == 0:
-            if elementos[y + 1] != 0:
-                subtotal = elementos[y] / elementos[y + 1]
-            else:
-                return "division por 0"
-        elif i == "/" and y != 0:
-            if elementos[y + 1] != 0:
-                subtotal /= elementos[y + 1]
-            else:
-                return "division por 0"
-        y += 1
-    return subtotal
-
-
-def memoria(elementos, operadores):
-    cadena = ""
-    a = 0
-    for i in elementos:
-        if a >= len(operadores):
-            cadena += str(i)
-        else:
-            cadena += str(i) + operadores[a]
-        a += 1
-    return cadena
+from cal import Calculadora
 
 path = str(sys.path[0])
 form_QtCalWindow = uic.loadUiType(path + "/ui/QtCal.ui")[0]
+path_HojaEstilo = path + "/ui/styles.qss"
+calc = Calculadora()
 
 
 class QtCalWin(QMainWindow, form_QtCalWindow):
@@ -75,7 +37,7 @@ class QtCalWin(QMainWindow, form_QtCalWindow):
 
         #se carga la hoja de estilo de la aplicacion
         self.setObjectName("WindowMain")
-        with open("styles.css") as f:
+        with open(path_HojaEstilo) as f:
             self.setStyleSheet(f.read())
 
     def addn(self):
@@ -108,26 +70,26 @@ class QtCalWin(QMainWindow, form_QtCalWindow):
                 self.lista_op.append(operacion)
             elif len(self.lista_op):
                 self.lista_numeros.append(float(self.display_ql.text()))
-                x = total(self.lista_numeros, self.lista_op)
+                x = calc.total(self.lista_numeros, self.lista_op)
                 self.display_ql.setText(str(x))
-                self.registro_ql.setText(memoria(self.lista_numeros,
-                                                 self.lista_op))
+                self.registro_ql.setText(calc.memoria(self.lista_numeros,
+                                                      self.lista_op))
                 self.lista_op.append(operacion)
                 self.primer_caracter = True
         elif operacion == "R2":
             #if self.totalizo:
             #    self.lista_numeros.append(float(self.display_ql.text()))
-            #ejemplo de un QMessageBox
+
             QMessageBox.information(self, 'Informacion:', 'no implementado '
                                                           'lo sentimos.')
         elif operacion == "=":
             self.lista_numeros.append(float(self.display_ql.text()))
-            x = total(self.lista_numeros, self.lista_op)
+            x = calc.total(self.lista_numeros, self.lista_op)
             self.display_ql.setText(str(x))
-            self.registro_ql.setText(memoria(self.lista_numeros,
-                                             self.lista_op))
+            self.registro_ql.setText(calc.memoria(self.lista_numeros,
+                                                  self.lista_op))
             self.clear(False)
-            self.totalizo = True
+            #self.totalizo = True
         elif operacion == "CE":
             self.clear(True)
 
