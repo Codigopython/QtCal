@@ -9,4 +9,7 @@ GUI en pyQt4, Autor Harrinsoft@gmail.com
     **31/05/2016**
       * se acomodo la estructura del proyecto
       * cambios menores.
+   
+   **01/05/2016**
+      * se implemento la funcion Raiz cuadrada
 
